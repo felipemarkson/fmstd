@@ -1,6 +1,6 @@
 rm -f fm_std.h
 echo -e "/*
-Automaticaly created in $(date --rfc-3339=seconds -u)
+Automaticaly created.
 fm_std.h - Felipe Monteiro's C standard library
 
 Check the [repostiory](https://github.com/felipemarkson/fm_std) for more details.
