@@ -80,3 +80,4 @@ All the macros that you can replace can be found on `src/common.h`.
 
 The source code are licesed under MIT No Attribution, a public domain equivalent
 license.
+
