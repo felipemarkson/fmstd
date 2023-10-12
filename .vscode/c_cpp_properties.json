@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c89",
+            "compilerArgs": [
+                "-ansi",
+                "-pedantic",
+                "-Wall",
+                "-Wextra",
+                "-Werror",
+                "-ggdb",
+                "-I."
+            ]
+        }
+    ],
+    "version": 4
+}

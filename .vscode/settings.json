@@ -1,0 +1,30 @@
+{
+    "files.associations": {
+        "cstdlib": "cpp",
+        "chrono": "c",
+        "variant": "c",
+        "hash_map": "c",
+        "algorithm": "c",
+        "format": "c",
+        "stdlib.h": "c",
+        "vector": "cpp",
+        "array": "c",
+        "string_view": "c",
+        "initializer_list": "c",
+        "span": "c",
+        "darray.h": "c",
+        "dstr.h": "c",
+        "any": "c",
+        "charconv": "c",
+        "compare": "c",
+        "functional": "c",
+        "ratio": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "string.h": "c",
+        "assert.h": "c",
+        "fm_std.h": "c"
+    },
+    "C_Cpp.enhancedColorization": "enabled"
+}
