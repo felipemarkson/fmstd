@@ -1,5 +1,5 @@
 /*
-Automaticaly created in 2023-10-12 21:52:08+00:00
+Automaticaly created.
 fm_std.h - Felipe Monteiro's C standard library
 
 Check the [repostiory](https://github.com/felipemarkson/fm_std) for more details.

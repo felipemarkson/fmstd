@@ -1,0 +1,24 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Check if the fm_std.h is updated
+      run: value=($(cksum fm_std.h)) && value=${value[0]} && ./assembly_header.sh && value2=($(cksum fm_std.h)) && value2=${value2[0]} && echo $(expr $value - $value2) && exit $(expr $value - $value2)
+    - name: Install debug dependencies
+      run: sudo apt-get update && sudo apt-get install -y clang valgrind cppcheck 
+    - name: Build tests
+      run: ./build_tests.sh
+    - name: Run tests
+      run: ./run_tests.sh
+
