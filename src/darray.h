@@ -148,13 +148,13 @@
                        out_ptr_index)                                              \
     do {                                                                           \
         FMSIZE i, j;                                                              \
-        *out_ptr_bool = FMFALSE;                                                  \
-        for (i = 0; i < first_ptr_darray->len; i++) {                              \
+        *(out_ptr_bool) = FMFALSE;                                                  \
+        for (i = 0; i < (first_ptr_darray)->len; i++) {                              \
             FMBOOL found = FMTRUE;                                               \
             FMSIZE k = i;                                                         \
-            for (j = 0; j < second_ptr_darray->len; j++) {                         \
-                if ((k < first_ptr_darray->len) &&                                 \
-                    (first_ptr_darray->elems[k] == second_ptr_darray->elems[j])) { \
+            for (j = 0; j < (second_ptr_darray)->len; j++) {                         \
+                if ((k < (first_ptr_darray)->len) &&                                 \
+                    ((first_ptr_darray)->elems[k] == (second_ptr_darray)->elems[j])) { \
                     ++k;                                                           \
                 } else {                                                           \
                     found = FMFALSE;                                              \
@@ -162,8 +162,8 @@
                 }                                                                  \
             }                                                                      \
             if (found) {                                                           \
-                *out_ptr_index = i;                                                \
-                *out_ptr_bool = FMTRUE;                                           \
+                *(out_ptr_index) = i;                                                \
+                *(out_ptr_bool) = FMTRUE;                                           \
                 break;                                                             \
             }                                                                      \
         }                                                                          \

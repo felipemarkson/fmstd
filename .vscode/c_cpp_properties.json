@@ -13,6 +13,10 @@
                 "-Werror",
                 "-ggdb",
                 "-I."
+            ],
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}"
             ]
         }
     ],

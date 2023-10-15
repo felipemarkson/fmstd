@@ -68,6 +68,16 @@ int main(void) {
     {
         assert(ret == FMFALSE && "fmdstr_find should not found");
     }
+    ret = fmdstr_find_da(&a, B_TEST, LEN_B, &index);
+    {
+        assert(ret == FMTRUE && "fmdstr_find not found");
+        assert(index == LEN_A && "fmdstr_find wrong index");
+    }
+    ret = fmdstr_find_dc(&a, B_TEST, &index);
+    {
+        assert(ret == FMTRUE && "fmdstr_find not found");
+        assert(index == LEN_A && "fmdstr_find wrong index");
+    }
 
 
     fmdstr_reverse(&b);

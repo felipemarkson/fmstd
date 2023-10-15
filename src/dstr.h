@@ -49,10 +49,24 @@ void fmdstr_concat(fmdstr_t* first, const fmdstr_t* second);
 FMBOOL fmdstr_eq(const fmdstr_t* dstr, const fmdstr_t* other);
 
 /*
-Check if the `token` is in `dstr` storing the location in `index`.
+Check if the `token` is in `dstr` storing the location in `out_index`.
 Returns `FMTRUE` if found, `FMFALSE`otherwise
 */
-FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* index);
+FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* out_index);
+
+/*
+Check if the `token` is in `dstr` storing the location in `out_index`.
+Returns `FMTRUE` if found, `FMFALSE`otherwise
+*/
+FMBOOL fmdstr_find_da(const fmdstr_t* dstr, const char* array_token, FMSIZE size,
+                      FMSIZE* out_index);
+
+/*
+Check if the `token` is in `dstr` storing the location in `out_index`.
+Returns `FMTRUE` if found, `FMFALSE`otherwise
+*/
+FMBOOL fmdstr_find_dc(const fmdstr_t* dstr, const char* null_terminated_token,
+                      FMSIZE* out_index);
 
 /* Reverts the dynamic string */
 void fmdstr_reverse(fmdstr_t* dstr);
@@ -117,9 +131,9 @@ void fmdstr_concat(fmdstr_t* first, const fmdstr_t* second) {
     fmdstr_push_array(first, second->len, second->elems);
 }
 
-FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* index) {
+FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* out_index) {
     FMBOOL out;
-    fmdarray_find(dstr, token, &out, index);
+    fmdarray_find(dstr, token, &out, out_index);
     return out;
 }
 
@@ -128,6 +142,36 @@ void fmdstr_reverse(fmdstr_t* dstr) { fmdarray_reverse(dstr, char); }
 FMBOOL fmdstr_eq(const fmdstr_t* dstr, const fmdstr_t* other) {
     FMBOOL out;
     fmdarray_eq(dstr, other, &out);
+    return out;
+}
+
+FMBOOL fmdstr_find_da(const fmdstr_t* dstr, const char* array_token, FMSIZE size,
+                      FMSIZE* out_index) {
+    fmdstr_t temp = {0};
+    FMBOOL out;
+
+    temp.elems = (char*)array_token;
+    temp.capacity = size;
+    temp.len = size;
+
+    fmdarray_find(dstr, &temp, &out, out_index);
+    return out;
+}
+
+FMBOOL fmdstr_find_dc(const fmdstr_t* dstr, const char* null_terminated_token,
+                      FMSIZE* out_index) {
+    fmdstr_t temp = {0};
+    const char* temp_ptr = null_terminated_token;
+    FMBOOL out;
+
+    temp.elems = (char*)null_terminated_token;
+    while (*temp_ptr != '\0') {
+        ++temp.len;
+        ++temp.capacity;
+        ++temp_ptr;
+    }
+
+    fmdarray_find(dstr, &temp, &out, out_index);
     return out;
 }
 #endif

@@ -236,13 +236,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                        out_ptr_index)                                              \
     do {                                                                           \
         FMSIZE i, j;                                                              \
-        *out_ptr_bool = FMFALSE;                                                  \
-        for (i = 0; i < first_ptr_darray->len; i++) {                              \
+        *(out_ptr_bool) = FMFALSE;                                                  \
+        for (i = 0; i < (first_ptr_darray)->len; i++) {                              \
             FMBOOL found = FMTRUE;                                               \
             FMSIZE k = i;                                                         \
-            for (j = 0; j < second_ptr_darray->len; j++) {                         \
-                if ((k < first_ptr_darray->len) &&                                 \
-                    (first_ptr_darray->elems[k] == second_ptr_darray->elems[j])) { \
+            for (j = 0; j < (second_ptr_darray)->len; j++) {                         \
+                if ((k < (first_ptr_darray)->len) &&                                 \
+                    ((first_ptr_darray)->elems[k] == (second_ptr_darray)->elems[j])) { \
                     ++k;                                                           \
                 } else {                                                           \
                     found = FMFALSE;                                              \
@@ -250,8 +250,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 }                                                                  \
             }                                                                      \
             if (found) {                                                           \
-                *out_ptr_index = i;                                                \
-                *out_ptr_bool = FMTRUE;                                           \
+                *(out_ptr_index) = i;                                                \
+                *(out_ptr_bool) = FMTRUE;                                           \
                 break;                                                             \
             }                                                                      \
         }                                                                          \
@@ -311,10 +311,24 @@ void fmdstr_concat(fmdstr_t* first, const fmdstr_t* second);
 FMBOOL fmdstr_eq(const fmdstr_t* dstr, const fmdstr_t* other);
 
 /*
-Check if the `token` is in `dstr` storing the location in `index`.
+Check if the `token` is in `dstr` storing the location in `out_index`.
 Returns `FMTRUE` if found, `FMFALSE`otherwise
 */
-FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* index);
+FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* out_index);
+
+/*
+Check if the `token` is in `dstr` storing the location in `out_index`.
+Returns `FMTRUE` if found, `FMFALSE`otherwise
+*/
+FMBOOL fmdstr_find_da(const fmdstr_t* dstr, const char* array_token, FMSIZE size,
+                      FMSIZE* out_index);
+
+/*
+Check if the `token` is in `dstr` storing the location in `out_index`.
+Returns `FMTRUE` if found, `FMFALSE`otherwise
+*/
+FMBOOL fmdstr_find_dc(const fmdstr_t* dstr, const char* null_terminated_token,
+                      FMSIZE* out_index);
 
 /* Reverts the dynamic string */
 void fmdstr_reverse(fmdstr_t* dstr);
@@ -379,9 +393,9 @@ void fmdstr_concat(fmdstr_t* first, const fmdstr_t* second) {
     fmdstr_push_array(first, second->len, second->elems);
 }
 
-FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* index) {
+FMBOOL fmdstr_find(const fmdstr_t* dstr, const fmdstr_t* token, FMSIZE* out_index) {
     FMBOOL out;
-    fmdarray_find(dstr, token, &out, index);
+    fmdarray_find(dstr, token, &out, out_index);
     return out;
 }
 
@@ -390,6 +404,36 @@ void fmdstr_reverse(fmdstr_t* dstr) { fmdarray_reverse(dstr, char); }
 FMBOOL fmdstr_eq(const fmdstr_t* dstr, const fmdstr_t* other) {
     FMBOOL out;
     fmdarray_eq(dstr, other, &out);
+    return out;
+}
+
+FMBOOL fmdstr_find_da(const fmdstr_t* dstr, const char* array_token, FMSIZE size,
+                      FMSIZE* out_index) {
+    fmdstr_t temp = {0};
+    FMBOOL out;
+
+    temp.elems = (char*)array_token;
+    temp.capacity = size;
+    temp.len = size;
+
+    fmdarray_find(dstr, &temp, &out, out_index);
+    return out;
+}
+
+FMBOOL fmdstr_find_dc(const fmdstr_t* dstr, const char* null_terminated_token,
+                      FMSIZE* out_index) {
+    fmdstr_t temp = {0};
+    const char* temp_ptr = null_terminated_token;
+    FMBOOL out;
+
+    temp.elems = (char*)null_terminated_token;
+    while (*temp_ptr != '\0') {
+        ++temp.len;
+        ++temp.capacity;
+        ++temp_ptr;
+    }
+
+    fmdarray_find(dstr, &temp, &out, out_index);
     return out;
 }
 #endif
@@ -404,30 +448,40 @@ typedef struct {
     const FMSIZE len;
 } fmstrv_t;
 
-void fmstrv_from_dstr(const fmdstr_t* dstr, fmstrv_t* out, FMSIZE begin,
-                       FMSIZE len);
+void fmstrv_from_dstr(const fmdstr_t* dstr, fmstrv_t* out, FMSIZE begin, FMSIZE len);
 
 void fmstrv_from_cstr(const char* null_terminated_cstr, fmstrv_t* out, FMSIZE begin,
-                       FMSIZE len);
+                      FMSIZE len);
 
 void fmstrv_from_array(const char* array, FMSIZE size, fmstrv_t* out, FMSIZE begin,
-                        FMSIZE len);
+                       FMSIZE len);
 
-FMBOOL fmstrv_find(const fmstrv_t* strv, const fmstrv_t* token, FMSIZE* index);
+FMBOOL fmstrv_find(const fmstrv_t* strv, const fmstrv_t* token, FMSIZE* out_index);
 
-FMBOOL fmstrv_findin_dstr(const fmstrv_t* token, const fmdstr_t* dstr,
-                            FMSIZE* index);
+FMBOOL fmstrv_find_dv(const fmdstr_t* dstr, const fmstrv_t* token, FMSIZE* out_index);
 
-FMBOOL fmdstr_findin_strv(const fmdstr_t* token, const fmstrv_t* strv,
-                            FMSIZE* index);
+FMBOOL fmdstr_find_vd(const fmstrv_t* strv, const fmdstr_t* token, FMSIZE* out_index);
+
+FMBOOL fmdstr_find_av(const char* array, FMSIZE size, const fmstrv_t* token,
+                      FMSIZE* out_index);
+
+FMBOOL fmdstr_find_va(const fmstrv_t* strv, const char* array_token, FMSIZE size,
+                      FMSIZE* out_index);
+
+FMBOOL fmdstr_find_cv(const char* null_terminated_cstr, const fmstrv_t* token,
+                      FMSIZE* out_index);
+
+FMBOOL fmdstr_find_vc(const fmstrv_t* strv, const char* null_terminated_token,
+                      FMSIZE* out_index);
+
+char* fmstrv_to_cstr(const fmstrv_t* strv);
 
 #endif
 #endif
 
 /* strv - Implementation */
 #ifdef IMPLEMENT_FMSTRV
-void fmstrv_from_dstr(const fmdstr_t* dstr, fmstrv_t* out, FMSIZE begin,
-                       FMSIZE len) {
+void fmstrv_from_dstr(const fmdstr_t* dstr, fmstrv_t* out, FMSIZE begin, FMSIZE len) {
     char** ptr = (char**)(&(out->elems));
     FMSIZE* inner_len = (FMSIZE*)(&(out->len));
     if ((begin + len) <= dstr->len) {
@@ -440,7 +494,7 @@ void fmstrv_from_dstr(const fmdstr_t* dstr, fmstrv_t* out, FMSIZE begin,
 }
 
 void fmstrv_from_array(const char* array, FMSIZE size, fmstrv_t* out, FMSIZE begin,
-                        FMSIZE len) {
+                       FMSIZE len) {
     char** ptr = (char**)(&(out->elems));
     FMSIZE* inner_len = (FMSIZE*)(&(out->len));
     if ((begin + len) <= size) {
@@ -453,7 +507,7 @@ void fmstrv_from_array(const char* array, FMSIZE size, fmstrv_t* out, FMSIZE beg
 }
 
 void fmstrv_from_cstr(const char* null_terminated_cstr, fmstrv_t* out, FMSIZE begin,
-                       FMSIZE len) {
+                      FMSIZE len) {
     char** ptr = (char**)(&(out->elems));
     FMSIZE* inner_len = (FMSIZE*)(&(out->len));
     char* temp = (char*)null_terminated_cstr;
@@ -471,23 +525,30 @@ void fmstrv_from_cstr(const char* null_terminated_cstr, fmstrv_t* out, FMSIZE be
     }
 }
 
-FMBOOL fmstrv_find(const fmstrv_t* strv, const fmstrv_t* token, FMSIZE* index) {
+FMBOOL fmstrv_find(const fmstrv_t* strv, const fmstrv_t* token, FMSIZE* out_index) {
     FMBOOL out;
-    fmdarray_find(strv, token, &out, index);
+    fmdarray_find(strv, token, &out, out_index);
     return out;
 }
 
-FMBOOL fmstrv_findin_dstr(const fmstrv_t* token, const fmdstr_t* dstr,
-                            FMSIZE* index) {
+FMBOOL fmstrv_find_dv(const fmdstr_t* dstr, const fmstrv_t* token, FMSIZE* out_index) {
     FMBOOL out;
-    fmdarray_find(dstr, token, &out, index);
+    fmdarray_find(dstr, token, &out, out_index);
     return out;
 }
 
-FMBOOL fmdstr_findin_strv(const fmdstr_t* token, const fmstrv_t* strv,
-                            FMSIZE* index) {
+FMBOOL fmdstr_find_vd(const fmstrv_t* strv, const fmdstr_t* token, FMSIZE* out_index) {
     FMBOOL out;
-    fmdarray_find(strv, token, &out, index);
+    fmdarray_find(strv, token, &out, out_index);
+    return out;
+}
+
+char* fmstrv_to_cstr(const fmstrv_t* strv) {
+    char* out = FMREALLOC(NULL, strv->len + 1);
+    FMSIZE i;
+    if (out == NULL) return out;
+    for (i = 0; i < strv->len; ++i) out[i] = strv->elems[i];
+    out[strv->len] = '\0';
     return out;
 }
 
