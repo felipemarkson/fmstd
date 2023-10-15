@@ -1,13 +1,21 @@
 /* dependency - Dependecy tree definitions */
-#ifdef IMPLEMENT_FM_DSTR
-#define INCLUDE_FM_DSTR
+#ifdef IMPLEMENT_FMSTRV
+#define INCLUDE_FMSTRV
 #endif
 
-#ifdef INCLUDE_FM_DSTR
-#define INCLUDE_FM_DARRAY
+#ifdef IMPLEMENT_FMDSTR
+#define INCLUDE_FMDSTR
 #endif
 
-#ifdef INCLUDE_FM_DARRAY
-#define INCLUDE_FM_COMMON
+#ifdef INCLUDE_FMSTRV
+#define INCLUDE_FMDSTR
+#endif
+
+#ifdef INCLUDE_FMDSTR
+#define INCLUDE_FMDARRAY
+#endif
+
+#ifdef INCLUDE_FMDARRAY
+#define INCLUDE_FMCOMMON
 #endif
 /* ends of dependency - Dependecy tree definitions */

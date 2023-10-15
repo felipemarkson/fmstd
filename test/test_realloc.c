@@ -1,10 +1,10 @@
 #include <assert.h>
 
-#define FM_REALLOC my_realloc
-#define INCLUDE_FM_DARRAY
-#include "fm_std.h"
+#define FMREALLOC my_realloc
+#define INCLUDE_FMDARRAY
+#include "fmstd.h"
 
-typedef fm_darray_t(int) VecInt;
+typedef fmdarray_t(int) VecInt;
 
 void* my_realloc(void* ptr, size_t size) {
     (void)ptr;
@@ -13,7 +13,7 @@ void* my_realloc(void* ptr, size_t size) {
 }
 int main(void) {
     VecInt vec = {0};
-    fm_darray_push(&vec, 1);
-    assert(vec.error && "fm_darray_push with my_realloc should set error to true");
+    fmdarray_push(&vec, 1);
+    assert(vec.error && "fmdarray_push with my_realloc should set error to true");
     return 0;
 }

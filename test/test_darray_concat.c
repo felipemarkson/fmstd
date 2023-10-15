@@ -1,25 +1,25 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define FM_DARRAY_INITAL_CAPACITY 2
-#define INCLUDE_FM_DARRAY
-#include "fm_std.h"
+#define FMDARRAY_INITAL_CAPACITY 2
+#define INCLUDE_FMDARRAY
+#include "fmstd.h"
 
-typedef fm_darray_t(int) VecInt;
+typedef fmdarray_t(int) VecInt;
 
 int main(void) {
     VecInt a = {0};
     VecInt b = {0};
 
-    fm_darray_push(&a, -1);
-    fm_darray_push(&a, -2);
-    fm_darray_push(&a, -3);
+    fmdarray_push(&a, -1);
+    fmdarray_push(&a, -2);
+    fmdarray_push(&a, -3);
 
-    fm_darray_push(&b, -4);
-    fm_darray_push(&b, -5);
-    fm_darray_push(&b, -6);
+    fmdarray_push(&b, -4);
+    fmdarray_push(&b, -5);
+    fmdarray_push(&b, -6);
 
-    fm_darray_concat(&a, &b);
+    fmdarray_concat(&a, &b);
     {
         assert(!a.error && "a in error");
         assert(!b.error && "b in error");
@@ -40,7 +40,7 @@ int main(void) {
         assert(b.elems[2] == -6 && "b[0] wrong");
     }
 
-    fm_darray_free(&a);
-    fm_darray_free(&b);
+    fmdarray_free(&a);
+    fmdarray_free(&b);
     return 0;
 }

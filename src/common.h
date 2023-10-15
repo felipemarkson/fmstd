@@ -1,6 +1,6 @@
 /* common - Common definitions used in all library */
-#ifdef INCLUDE_FM_COMMON
-#ifndef FM_COMMON_H
+#ifdef INCLUDE_FMCOMMON
+#ifndef FMCOMMON_H
 
 #ifndef NULL
 #include <stddef.h>
@@ -9,31 +9,31 @@
 #endif
 #endif
 
-#ifndef FM_REALLOC
+#ifndef FMREALLOC
 #include <stdlib.h>
-#define FM_REALLOC realloc
+#define FMREALLOC realloc
 #endif
 
-#ifndef FM_FREE
+#ifndef FMFREE
 #include <stdlib.h>
-#define FM_FREE free
+#define FMFREE free
 #endif
 
-#ifndef FM_SIZE
+#ifndef FMSIZE
 #include <stddef.h>
-#define FM_SIZE size_t
+#define FMSIZE size_t
 #endif
 
-#ifndef FM_BOOL
-#define FM_BOOL unsigned int
+#ifndef FMBOOL
+#define FMBOOL unsigned int
 #endif
 
-#ifndef FM_TRUE
-#define FM_TRUE ((FM_BOOL)1)
+#ifndef FMTRUE
+#define FMTRUE ((FMBOOL)1)
 #endif
 
-#ifndef FM_FALSE
-#define FM_FALSE ((FM_BOOL)0)
+#ifndef FMFALSE
+#define FMFALSE ((FMBOOL)0)
 #endif
 
 #endif

@@ -1,4 +1,4 @@
 *.o
 example/main
-example/fm_std.h
+example/fmstd.h
 bin/*
