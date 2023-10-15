@@ -1,19 +1,20 @@
-rm -f fm_std.h
+rm -f fmstd.h
 echo -e "/*
 Automaticaly created.
-fm_std.h - Felipe Monteiro's C standard library
+fmstd.h - Felipe Monteiro's C standard library
 
-Check the [repostiory](https://github.com/felipemarkson/fm_std) for more details.
+Check the [repostiory](https://github.com/felipemarkson/fmstd) for more details.
 ---
 LICENSE
 
 $(cat ./LICENSE)
 ---
-*/" >> fm_std.h
+*/" >> fmstd.h
 
 cat  \
 src/dependency.h \
 src/common.h \
 src/darray.h \
 src/dstr.h \
->> fm_std.h
+src/strv.h \
+>> fmstd.h

@@ -24,7 +24,11 @@
         "utility": "c",
         "string.h": "c",
         "assert.h": "c",
-        "fm_std.h": "c"
+        "fmstd.h": "c",
+        "string": "c",
+        "deque": "c",
+        "list": "c",
+        "unordered_map": "c"
     },
     "C_Cpp.enhancedColorization": "enabled"
 }

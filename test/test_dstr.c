@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define IMPLEMENT_FM_DSTR
-#include "fm_std.h"
+#define IMPLEMENT_FMDSTR
+#include "fmstd.h"
 
 #define A_TEST "abcd"
 #define LEN_A sizeof(A_TEST) - 1
@@ -15,74 +15,97 @@
 #define C_REV "4321"
 
 int main(void) {
-    fm_dstr_t a = {0};
-    fm_dstr_t b = {0};
-    fm_dstr_t c = {0};
+    fmdstr_t a = {0};
+    fmdstr_t b = {0};
+    fmdstr_t c = {0};
+    fmdstr_t d = {0};
     char* cstr = {0};
-    FM_SIZE index;
-    FM_BOOL ret;
+    FMSIZE index;
+    FMBOOL ret;
 
-    fm_dstr_push_array(&a, LEN_A, A_TEST);
+    fmdstr_push_array(&a, LEN_A, A_TEST);
     {
         assert(!a.error && "dstr is in errror");
-        cstr = fm_dstr_to_cstr(&a);
-        assert(cstr && "fm_dstr_to_cstr returns NULL");
-        assert(strcmp(cstr, "abcd") == 0 && "fm_dstr_push_array not match");
+        cstr = fmdstr_to_cstr(&a);
+        assert(cstr && "fmdstr_to_cstr returns NULL");
+        assert(strcmp(cstr, "abcd") == 0 && "fmdstr_push_array not match");
         free(cstr);
     }
 
-    b = fm_dstr_from_cstr(B_TEST);
+    b = fmdstr_from_cstr(B_TEST);
     {
         assert(!b.error && "dstr is in errror");
-        cstr = fm_dstr_to_cstr(&b);
-        assert(cstr && "fm_dstr_to_cstr returns NULL");
-        assert(strcmp(cstr, B_TEST) == 0 && "fm_dstr_push_array not match");
+        cstr = fmdstr_to_cstr(&b);
+        assert(cstr && "fmdstr_to_cstr returns NULL");
+        assert(strcmp(cstr, B_TEST) == 0 && "fmdstr_push_array not match");
         free(cstr);
     }
 
-    fm_dstr_concat(&a, &b);
+    fmdstr_push_array(&c, LEN_C, C_TEST);
+    fmdstr_concat(&a, &b);
+    fmdstr_concat(&a, &c);
     {
         assert(!a.error && "dstr is in errror");
-        cstr = fm_dstr_to_cstr(&a);
-        assert(cstr && "fm_dstr_to_cstr returns NULL");
-        assert(strcmp(cstr, A_TEST B_TEST) == 0 && "fm_dstr_concat not match");
+        cstr = fmdstr_to_cstr(&a);
+        assert(cstr && "fmdstr_to_cstr returns NULL");
+        assert(strcmp(cstr, A_TEST B_TEST C_TEST) == 0 && "fmdstr_concat not match");
         free(cstr);
     }
 
-    fm_dstr_push_array(&a, LEN_A, A_TEST);
-    assert(!a.error && "dstr is in errror");
-    ret = fm_dstr_find(&a, &b, &index);
+    fmdstr_push_array(&a, LEN_A, A_TEST);
+    ret = fmdstr_find(&a, &b, &index);
     {
-        assert(ret == FM_TRUE && "fm_dstr_find not found");
-        assert(index == LEN_A && "fm_dstr_find wrong index");
+        assert(ret == FMTRUE && "fmdstr_find not found");
+        assert(index == LEN_A && "fmdstr_find wrong index");
+    }
+    ret = fmdstr_find(&a, &c, &index);
+    {
+        assert(ret == FMTRUE && "fmdstr_find not found");
+        assert(index == (LEN_A + LEN_B) && "fmdstr_find wrong index");
+    }
+    d = fmdstr_from_cstr("NOTFOUND");
+    ret = fmdstr_find(&a, &d, &index);
+    {
+        assert(ret == FMFALSE && "fmdstr_find should not found");
+    }
+    ret = fmdstr_find_da(&a, B_TEST, LEN_B, &index);
+    {
+        assert(ret == FMTRUE && "fmdstr_find not found");
+        assert(index == LEN_A && "fmdstr_find wrong index");
+    }
+    ret = fmdstr_find_dc(&a, B_TEST, &index);
+    {
+        assert(ret == FMTRUE && "fmdstr_find not found");
+        assert(index == LEN_A && "fmdstr_find wrong index");
     }
 
-    fm_dstr_reverse(&b);
+
+    fmdstr_reverse(&b);
     {
-        cstr = fm_dstr_to_cstr(&b);
-        assert(cstr && "fm_dstr_to_cstr returns NULL");
-        assert(strcmp(cstr, B_REV) == 0 && "fm_dstr_reverse not match");
+        cstr = fmdstr_to_cstr(&b);
+        assert(cstr && "fmdstr_to_cstr returns NULL");
+        assert(strcmp(cstr, B_REV) == 0 && "fmdstr_reverse not match");
         free(cstr);
     }
 
-    fm_dstr_push_array(&c, LEN_C, C_TEST);
-    fm_dstr_reverse(&c);
+    fmdstr_reverse(&c);
     {
         assert(!c.error && "dstr is in errror");
-        cstr = fm_dstr_to_cstr(&c);
-        assert(cstr && "fm_dstr_to_cstr returns NULL");
-        assert(strcmp(cstr, C_REV) == 0 && "fm_dstr_reverse not match");
+        cstr = fmdstr_to_cstr(&c);
+        assert(cstr && "fmdstr_to_cstr returns NULL");
+        assert(strcmp(cstr, C_REV) == 0 && "fmdstr_reverse not match");
         free(cstr);
     }
 
-    assert((!fm_dstr_eq(&a, &b)) && "fm_dstr_eq returns true but must be false");
-    assert((!fm_dstr_eq(&c, &b)) && "fm_dstr_eq returns true but must be false");
-    assert((fm_dstr_eq(&a, &a)) && "fm_dstr_eq returns false but must be true");
-    assert((fm_dstr_eq(&b, &b)) && "fm_dstr_eq returns false but must be true");
-    assert((fm_dstr_eq(&c, &c)) && "fm_dstr_eq returns false but must be true");
+    assert((!fmdstr_eq(&a, &b)) && "fmdstr_eq returns true but must be false");
+    assert((!fmdstr_eq(&c, &b)) && "fmdstr_eq returns true but must be false");
+    assert((fmdstr_eq(&a, &a)) && "fmdstr_eq returns false but must be true");
+    assert((fmdstr_eq(&b, &b)) && "fmdstr_eq returns false but must be true");
+    assert((fmdstr_eq(&c, &c)) && "fmdstr_eq returns false but must be true");
 
-    fm_darray_free(&a);
-    fm_darray_free(&b);
-    fm_darray_free(&c);
+    fmdarray_free(&a);
+    fmdarray_free(&b);
+    fmdarray_free(&c);
+    fmdarray_free(&d);
     return 0;
 }

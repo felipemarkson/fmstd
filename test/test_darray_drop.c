@@ -1,22 +1,22 @@
 #include <assert.h>
 #include <stdio.h>
 
-#define FM_DARRAY_INITAL_CAPACITY 2
-#define INCLUDE_FM_DARRAY
-#include "fm_std.h"
+#define FMDARRAY_INITAL_CAPACITY 2
+#define INCLUDE_FMDARRAY
+#include "fmstd.h"
 
-typedef fm_darray_t(int) VecInt;
+typedef fmdarray_t(int) VecInt;
 
 int main(void) {
     int value = {0};
     VecInt myvec = {0};
-    fm_darray_push(&myvec, -1);
-    fm_darray_push(&myvec, -2);
-    fm_darray_push(&myvec, -3);
-    fm_darray_push(&myvec, -4);
-    fm_darray_push(&myvec, -5);
+    fmdarray_push(&myvec, -1);
+    fmdarray_push(&myvec, -2);
+    fmdarray_push(&myvec, -3);
+    fmdarray_push(&myvec, -4);
+    fmdarray_push(&myvec, -5);
 
-    fm_darray_drop(&myvec, 2, &value);
+    fmdarray_drop(&myvec, 2, &value);
     {
         assert(!myvec.error);
         assert(myvec.len == 4 && "Len wrong!");
@@ -28,6 +28,6 @@ int main(void) {
         assert(!myvec.error && "In error");
     }
 
-    fm_darray_free(&myvec);
+    fmdarray_free(&myvec);
     return 0;
 }
