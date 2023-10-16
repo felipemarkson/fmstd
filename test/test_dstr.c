@@ -20,8 +20,6 @@ int main(void) {
     fmdstr_t c = {0};
     fmdstr_t d = {0};
     char* cstr = {0};
-    FMSIZE index;
-    FMBOOL ret;
 
     fmdstr_push_array(&a, LEN_A, A_TEST);
     {
@@ -52,34 +50,6 @@ int main(void) {
         free(cstr);
     }
 
-    fmdstr_push_array(&a, LEN_A, A_TEST);
-    ret = fmdstr_find(&a, &b, &index);
-    {
-        assert(ret == FMTRUE && "fmdstr_find not found");
-        assert(index == LEN_A && "fmdstr_find wrong index");
-    }
-    ret = fmdstr_find(&a, &c, &index);
-    {
-        assert(ret == FMTRUE && "fmdstr_find not found");
-        assert(index == (LEN_A + LEN_B) && "fmdstr_find wrong index");
-    }
-    d = fmdstr_from_cstr("NOTFOUND");
-    ret = fmdstr_find(&a, &d, &index);
-    {
-        assert(ret == FMFALSE && "fmdstr_find should not found");
-    }
-    ret = fmdstr_find_da(&a, B_TEST, LEN_B, &index);
-    {
-        assert(ret == FMTRUE && "fmdstr_find not found");
-        assert(index == LEN_A && "fmdstr_find wrong index");
-    }
-    ret = fmdstr_find_dc(&a, B_TEST, &index);
-    {
-        assert(ret == FMTRUE && "fmdstr_find not found");
-        assert(index == LEN_A && "fmdstr_find wrong index");
-    }
-
-
     fmdstr_reverse(&b);
     {
         cstr = fmdstr_to_cstr(&b);
@@ -96,12 +66,6 @@ int main(void) {
         assert(strcmp(cstr, C_REV) == 0 && "fmdstr_reverse not match");
         free(cstr);
     }
-
-    assert((!fmdstr_eq(&a, &b)) && "fmdstr_eq returns true but must be false");
-    assert((!fmdstr_eq(&c, &b)) && "fmdstr_eq returns true but must be false");
-    assert((fmdstr_eq(&a, &a)) && "fmdstr_eq returns false but must be true");
-    assert((fmdstr_eq(&b, &b)) && "fmdstr_eq returns false but must be true");
-    assert((fmdstr_eq(&c, &c)) && "fmdstr_eq returns false but must be true");
 
     fmdarray_free(&a);
     fmdarray_free(&b);

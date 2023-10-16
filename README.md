@@ -1,6 +1,6 @@
 # Felipe Monteiro's C standard library
 
-Single-file public domain library for C/C++. Compatible with C89 (ANSI C).
+Single-file public domain library for C/C++. Compatible with C99.
 
 - Generic dynamic array: `fmdarray`
 - Dynamic String: `fmdstr`

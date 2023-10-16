@@ -4,7 +4,7 @@
             "name": "Linux",
             "intelliSenseMode": "linux-clang-x64",
             "compilerPath": "/usr/bin/clang",
-            "cStandard": "c89",
+            "cStandard": "c99",
             "compilerArgs": [
                 "-ansi",
                 "-pedantic",

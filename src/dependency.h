@@ -1,4 +1,11 @@
 /* dependency - Dependecy tree definitions */
+#ifdef IMPLEMENT_FMALL
+#define IMPLEMENT_FMSTRV
+#define IMPLEMENT_FMDSTR
+#define INCLUDE_FMDARRAY
+#define INCLUDE_FMCOMMON
+#endif
+
 #ifdef IMPLEMENT_FMSTRV
 #define INCLUDE_FMSTRV
 #endif

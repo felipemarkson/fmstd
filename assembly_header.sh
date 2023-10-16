@@ -18,3 +18,6 @@ src/darray.h \
 src/dstr.h \
 src/strv.h \
 >> fmstd.h
+
+gcc -DIMPLEMENT_FMALL -c fmstd.h
+rm -f fmstd.h.gch
