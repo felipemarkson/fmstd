@@ -47,6 +47,7 @@ int main(void){
     cstr = fmdstr_to_cstr(&hi); /* fmdstr_to_cstr is implemented in hi.c */
     printf("%s\n", cstr);
     FMFREE(hi.elems); /* FMFREE is a macro defined in fmstd.h */
+    FMFREE(cstr);
     return 0;
 }
 ```

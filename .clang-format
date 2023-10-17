@@ -1,0 +1,10 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 88
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: Consecutive
+AllowShortBlocksOnASingleLine: Always
+PointerAlignment: Left
+QualifierAlignment: Left
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false

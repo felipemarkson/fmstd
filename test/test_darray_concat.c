@@ -12,12 +12,18 @@ int main(void) {
     VecInt b = {0};
 
     fmdarray_push(&a, -1);
+    assert(!a.error && "a in error");
     fmdarray_push(&a, -2);
+    assert(!a.error && "a in error");
     fmdarray_push(&a, -3);
+    assert(!a.error && "a in error");
 
     fmdarray_push(&b, -4);
+    assert(!b.error && "b in error");
     fmdarray_push(&b, -5);
+    assert(!b.error && "b in error");
     fmdarray_push(&b, -6);
+    assert(!b.error && "b in error");
 
     fmdarray_concat(&a, &b);
     {

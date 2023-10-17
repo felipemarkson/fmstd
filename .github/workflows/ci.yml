@@ -1,25 +1,33 @@
 name: C/C++ CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-  workflow_dispatch:
+  
 
 jobs:
-  build:
-
+  build_and_test:
     runs-on: ubuntu-latest
+    env:
+      ENV_BUILD: GH
 
     steps:
     - uses: actions/checkout@v3
     - name: Check if the fmstd.h is updated
-      run: value=($(cksum fmstd.h)) && value=${value[0]} && ./assembly_header.sh && value2=($(cksum fmstd.h)) && value2=${value2[0]} && echo $(expr $value - $value2) && exit $(expr $value - $value2)
+      run: ./scripts/check_header.sh
     - name: Install debug dependencies
-      run: sudo apt-get update && sudo apt-get install -y clang valgrind cppcheck 
+      run: sudo apt-get update && sudo apt-get install -y clang clang-format valgrind cppcheck 
+    - name: Checks the format of src/*
+      run: clang-format -style=file -dry-run -Werror src/*
+    - name: Check the format of the header
+      run: clang-format -style=file --Werror -dry-run fmstd.h
     - name: Build tests
-      run: ./build_tests.sh
+      run: ./scripts/build_tests.sh
     - name: Run tests
-      run: ./run_tests.sh
+      run: ./scripts/run_tests.sh
+    - name: Build and run example
+      run: ./scripts/build_run_example.sh
 

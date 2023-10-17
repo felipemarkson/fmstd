@@ -19,6 +19,11 @@
 #define FMFREE free
 #endif
 
+#ifndef FMSTRLEN
+#include <string.h>
+#define FMSTRLEN strlen
+#endif
+
 #ifndef FMSIZE
 #include <stddef.h>
 #define FMSIZE size_t

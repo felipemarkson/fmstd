@@ -36,45 +36,41 @@ fmdstr_t fmstrv_to_dstr(const fmstrv_t strv[static 1]);
 #ifdef IMPLEMENT_FMSTRV
 void fmstrv_from_dstr(const fmdstr_t dstr[static 1], fmstrv_t out[static 1],
                       FMSIZE begin, FMSIZE len) {
-    char** ptr = (char**)(&(out->elems));
+    char** ptr        = (char**)(&(out->elems));
     FMSIZE* inner_len = (FMSIZE*)(&(out->len));
     if ((begin + len) <= dstr->len) {
-        *ptr = (&(dstr->elems[begin]));
+        *ptr       = (&(dstr->elems[begin]));
         *inner_len = len;
     } else {
-        *ptr = NULL;
+        *ptr       = NULL;
         *inner_len = 0;
     }
 }
 
 void fmstrv_from_array(FMSIZE array_size, const char array[static array_size],
                        fmstrv_t out[static 1], FMSIZE begin, FMSIZE len) {
-    char** ptr = (char**)(&(out->elems));
+    char** ptr        = (char**)(&(out->elems));
     FMSIZE* inner_len = (FMSIZE*)(&(out->len));
     if ((begin + len) <= array_size) {
-        *ptr = (char*)(&(array[begin]));
+        *ptr       = (char*)(&(array[begin]));
         *inner_len = len;
     } else {
-        *ptr = NULL;
+        *ptr       = NULL;
         *inner_len = 0;
     }
 }
 
 void fmstrv_from_cstr(const char null_terminated_cstr[static 1], fmstrv_t out[static 1],
                       FMSIZE begin, FMSIZE len) {
-    char** ptr = (char**)(&(out->elems));
+    char** ptr        = (char**)(&(out->elems));
     FMSIZE* inner_len = (FMSIZE*)(&(out->len));
-    const char* temp = null_terminated_cstr;
-    FMSIZE size = 0;
-    while (*temp != '\0') {
-        ++size;
-        ++temp;
-    }
+
+    FMSIZE size = FMSTRLEN(null_terminated_cstr);
     if ((begin + len) <= size) {
-        *ptr = (char*)(&(null_terminated_cstr[begin]));
+        *ptr       = (char*)(&(null_terminated_cstr[begin]));
         *inner_len = len;
     } else {
-        *ptr = NULL;
+        *ptr       = NULL;
         *inner_len = 0;
     }
 }
@@ -89,14 +85,16 @@ FMBOOL fmstrv_find(const fmstrv_t strv[static 1], const fmstrv_t token[static 1]
 char* fmstrv_to_cstr(const fmstrv_t strv[static 1]) {
     char* out = FMREALLOC(NULL, (strv->len + 1) * sizeof(char));
     FMSIZE i;
-    if (out == NULL) return out;
-    for (i = 0; i < strv->len; ++i) out[i] = strv->elems[i];
+    if (out == NULL)
+        return out;
+    for (i = 0; i < strv->len; ++i)
+        out[i] = strv->elems[i];
     out[strv->len] = '\0';
     return out;
 }
 
 fmdstr_t fmstrv_to_dstr(const fmstrv_t strv[static 1]) {
-    fmdstr_t out = {0};
+    fmdstr_t out    = {0};
     FMSIZE capacity = 2 * (strv->len) * sizeof(char);
     FMSIZE i;
     out.elems = FMREALLOC(NULL, capacity);
@@ -104,9 +102,10 @@ fmdstr_t fmstrv_to_dstr(const fmstrv_t strv[static 1]) {
         out.error = FMTRUE;
         return out;
     }
-    for (i = 0; i < strv->len; ++i) out.elems[i] = strv->elems[i];
+    for (i = 0; i < strv->len; ++i)
+        out.elems[i] = strv->elems[i];
     out.capacity = capacity;
-    out.len = strv->len;
+    out.len      = strv->len;
     return out;
 }
 

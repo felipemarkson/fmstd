@@ -1,6 +1,6 @@
 rm -f fmstd.h
 echo -e "/*
-Automaticaly created.
+Created automatically.
 fmstd.h - Felipe Monteiro's C standard library
 
 Check the [repostiory](https://github.com/felipemarkson/fmstd) for more details.

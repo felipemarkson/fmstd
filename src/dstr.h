@@ -68,7 +68,7 @@ void fmdstr_reverse(fmdstr_t dstr[static 1]);
 void fmdstr_push_array(fmdstr_t string[static 1], FMSIZE array_len,
                        const char array[static array_len]) {
     FMSIZE initial_len = string->len;
-    FMSIZE req_cap = array_len + initial_len;
+    FMSIZE req_cap     = array_len + initial_len;
     FMSIZE i;
     if ((req_cap > string->capacity))
         fmdarray_set_capacity(string, FMDARRAY_GROWTH_RATE * req_cap);
@@ -77,22 +77,18 @@ void fmdstr_push_array(fmdstr_t string[static 1], FMSIZE array_len,
         return;
     }
 
-    for (i = 0; i < array_len; i++) string->elems[initial_len + i] = array[i];
+    for (i = 0; i < array_len; i++)
+        string->elems[initial_len + i] = array[i];
     string->len = req_cap;
 }
 
 fmdstr_t fmdstr_from_cstr(const char null_terminated_cstr[static 1]) {
-    FMSIZE len;
     fmdstr_t out = {0};
-    const char* temp = null_terminated_cstr;
-    if (null_terminated_cstr == NULL) return out;
-
-    len = 0;
-    while (*temp != '\0') {
-        ++len;
-        ++temp;
-    }
-    if (len == 0) return out;
+    if (null_terminated_cstr == NULL)
+        return out;
+    FMSIZE len = FMSTRLEN(null_terminated_cstr);
+    if (len == 0)
+        return out;
     fmdstr_push_array(&out, len, null_terminated_cstr);
     return out;
 }
@@ -101,8 +97,10 @@ char* fmdstr_to_cstr(const fmdstr_t string[static 1]) {
     char* out;
     FMSIZE i;
     out = FMREALLOC(NULL, (string->len + 1) * sizeof(char));
-    if (out == NULL) return out;
-    for (i = 0; i < string->len; i++) out[i] = string->elems[i];
+    if (out == NULL)
+        return out;
+    for (i = 0; i < string->len; i++)
+        out[i] = string->elems[i];
     out[string->len] = '\0';
     return out;
 }
