@@ -30,5 +30,6 @@
         "list": "c",
         "unordered_map": "c"
     },
-    "C_Cpp.enhancedColorization": "enabled"
+    "C_Cpp.enhancedColorization": "enabled",
+    "C_Cpp.dimInactiveRegions": false
 }

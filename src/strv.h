@@ -23,8 +23,9 @@ FMBOOL fmstrv_find(const fmstrv_t strv[static 1], const fmstrv_t token[static 1]
 char* fmstrv_to_cstr(const fmstrv_t strv[static 1]);
 fmdstr_t fmstrv_to_dstr(const fmstrv_t strv[static 1]);
 
+FMBOOL fmstrv_eq(const fmstrv_t strv[static 1], const fmstrv_t other[static 1]);
+
 /* TODO
-    eq
     split
     endswith
     startswith
@@ -106,6 +107,12 @@ fmdstr_t fmstrv_to_dstr(const fmstrv_t strv[static 1]) {
         out.elems[i] = strv->elems[i];
     out.capacity = capacity;
     out.len      = strv->len;
+    return out;
+}
+
+FMBOOL fmstrv_eq(const fmstrv_t strv[static 1], const fmstrv_t other[static 1]) {
+    FMBOOL out;
+    fmdarray_eq(strv, other, &out);
     return out;
 }
 
