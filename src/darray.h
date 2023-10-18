@@ -130,23 +130,22 @@ elemnt to the out_ptr_elem(?) if out_ptr_elem is not NULL.
 /* Moves the remaning elements to the right and insert a element at the index */
 #define fmdarray_insert(ptr_darray, index, new_elem)                                   \
     do {                                                                               \
-        FMSIZE len = (ptr_darray)->len;                                                \
-        FMSIZE i   = index;                                                            \
-        FMSIZE j;                                                                      \
-        if (i > (ptr_darray)->len) {                                                   \
+        FMSIZE intial_len = (ptr_darray)->len;                                         \
+        FMSIZE i          = index;                                                     \
+        if (i > intial_len) {                                                          \
             (ptr_darray)->error = FMTRUE;                                              \
         } else {                                                                       \
-            if ((len + 1) > (ptr_darray)->capacity)                                    \
-                fmdarray_push(ptr_darray, (ptr_darray)->elems[len - 1]);               \
+            if ((intial_len + 1) > (ptr_darray)->capacity)                             \
+                fmdarray_push(ptr_darray, (ptr_darray)->elems[intial_len - 1]);        \
+            else                                                                       \
+                ++(ptr_darray)->len;                                                   \
             if ((ptr_darray)->error)                                                   \
                 break;                                                                 \
-            for (j = i; j < (len - 1); j++)                                            \
+            for (FMSIZE j = intial_len - 1; j >= i; j--)                               \
                 (ptr_darray)->elems[j + 1] = (ptr_darray)->elems[j];                   \
             (ptr_darray)->elems[i] = new_elem;                                         \
-            ++(ptr_darray)->len;                                                       \
         }                                                                              \
     } while (0)
-
 /* Insert the sec_ptr_darray's elements into the first one. */
 #define fmdarray_concat(first_ptr_darray, sec_ptr_darray)                              \
     do {                                                                               \
