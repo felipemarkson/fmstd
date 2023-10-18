@@ -8,7 +8,7 @@
 typedef fmdarray_t(int) VecInt;
 
 int main(void) {
-    int value = {0};
+    int value    = {0};
     VecInt myvec = {0};
     fmdarray_push(&myvec, -1);
     {

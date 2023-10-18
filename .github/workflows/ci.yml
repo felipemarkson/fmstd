@@ -22,8 +22,10 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y clang clang-format valgrind cppcheck 
     - name: Checks the format of src/*
       run: clang-format -style=file -dry-run -Werror src/*
+    - name: Checks the format of test/*
+      run: clang-format -style=file -dry-run -Werror test/*
     - name: Check the format of the header
-      run: clang-format -style=file --Werror -dry-run fmstd.h
+      run: clang-format -style=file -dry-run -Werror fmstd.h
     - name: Build tests
       run: ./scripts/build_tests.sh
     - name: Run tests
