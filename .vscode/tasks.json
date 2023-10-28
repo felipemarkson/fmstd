@@ -8,6 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-I",
                 "${workspaceRoot}",
+                "-O0",
                 "-g",
                 "${file}",
                 "-o",

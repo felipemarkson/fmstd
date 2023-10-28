@@ -17,6 +17,7 @@ src/common.h \
 src/darray.h \
 src/dstr.h \
 src/strv.h \
+src/hashmap.h \
 >> fmstd.h
 
 gcc -DIMPLEMENT_FMALL -c fmstd.h

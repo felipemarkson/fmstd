@@ -3,7 +3,6 @@
 #include <string.h>
 
 #define IMPLEMENT_FMSTRV
-#define IMPLEMENT_FMDSTR
 #include "fmstd.h"
 
 int main(void) {

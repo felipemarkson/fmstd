@@ -28,7 +28,9 @@
         "string": "c",
         "deque": "c",
         "list": "c",
-        "unordered_map": "c"
+        "unordered_map": "c",
+        "optional": "c",
+        "system_error": "c"
     },
     "C_Cpp.enhancedColorization": "enabled",
     "C_Cpp.dimInactiveRegions": false

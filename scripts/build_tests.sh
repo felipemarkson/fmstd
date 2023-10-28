@@ -4,7 +4,7 @@ set -e
 cppcheck -I. --quiet --enable=all --language=c --std=c89 --max-ctu-depth=1000 \
 --inconclusive --suppress=missingIncludeSystem --suppress=unreadVariable  test/
 
-DEBUG="-Og -ggdb"
+DEBUG="-O0 -ggdb"
 OPT="-O3"
 WARNINGS="  -Wall -Wextra -Werror -Wformat-security -Wfloat-equal -Wshadow \
             -Wswitch-enum -Wbad-function-cast -Wconversion -Wlogical-not-parentheses \
