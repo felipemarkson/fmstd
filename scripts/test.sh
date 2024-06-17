@@ -38,13 +38,12 @@ rm -f $C_FILE
 echo "#define $TEST_FLAG" >> $C_FILE
 echo "#include \"$LIB\"" >> $C_FILE
 
-export UBSAN_OPTIONS="silence_unsigned_overflow=1,print_stacktrace=1"
+export UBSAN_OPTIONS="print_stacktrace=1"
 
 clang   -ggdb -O3 -std=c99 -pedantic \
         $WARNINGSCOMMON $WARNINGSCLANG \
-        -fsanitize=address,undefined,leak,integer \
+        -fsanitize=address,leak,undefined,nullability,float-divide-by-zero,implicit-conversion,local-bounds,nullability\
         -fno-omit-frame-pointer -fno-optimize-sibling-calls \
-        -fsanitize-recover=unsigned-integer-overflow \
         -o $BIN_NAME $C_FILE
 
 gcc     $WARNINGSCOMMON $WARNINGSGCC -ggdb -O3 -std=c99 -pedantic -o $BIN_NAME_GNU $C_FILE
