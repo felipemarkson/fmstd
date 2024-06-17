@@ -1,6 +1,6 @@
 {
     "files.associations": {
-        "cstdlib": "cpp",
+        "*.h": "c",
         "chrono": "c",
         "variant": "c",
         "hash_map": "c",
@@ -30,8 +30,12 @@
         "list": "c",
         "unordered_map": "c",
         "optional": "c",
-        "system_error": "c"
+        "system_error": "c",
+        "stdint.h": "c",
+        "stddef.h": "c",
+        "stdio.h": "c",
+        "cstdlib": "c"
     },
     "C_Cpp.enhancedColorization": "enabled",
-    "C_Cpp.dimInactiveRegions": false
+    "workbench.editor.languageDetection": false
 }

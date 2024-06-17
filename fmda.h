@@ -65,7 +65,7 @@
 #endif // FMDA_H
 
 // TESTING
-#ifdef FMDA_TEST
+#ifdef FM_TEST
 #include <stdio.h>
 
 typedef struct {
@@ -77,7 +77,7 @@ typedef struct {
 int main(void) {
     mytype one = {0};
 
-    printf("======== TESTING: fmda_push/fmda_at\n");
+    printf("======== TESTING: fmda_push and fmda_at\n");
     fmda_push(&one, 1);
     fmda_push(&one, 2);
     fmda_push(&one, 3);

@@ -6,7 +6,7 @@
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c99",
             "compilerArgs": [
-                "-ansi",
+                "-std=c99",
                 "-pedantic",
                 "-Wall",
                 "-Wextra",
@@ -17,7 +17,8 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}"
-            ]
+            ],
+            "defines": ["FM_TEST"]
         }
     ],
     "version": 4
