@@ -3,38 +3,42 @@
 
 #include <stddef.h> // size_t, NULL
 
-typedef int (*fmhs_cmp_f)(const void* item1ptr, const void* item2ptr, size_t size_item);
-typedef size_t (*fmhs_hash_f)(const void* itemptr, size_t size_item, size_t seed);
 
-#ifdef FMNULLABLE
-#undef FMNULLABLE
+#ifndef FMNULLABLE // The value can be NULL
+#define FMNULLABLE
 #endif
-#define FMNULLABLE // The value can be NULL
+
+#ifndef FMNONNULL // The value cannot be NULL
+#define FMNONNULL
+#endif
+
+typedef int(fmhs_cmp_f)(FMNONNULL const void* item1ptr, FMNONNULL const void* item2ptr, size_t size_item);
+typedef size_t(fmhs_hash_f)(FMNONNULL const void* itemptr, size_t size_item, size_t seed);
 
 typedef struct {
     int* taked;
     unsigned char* items;
     size_t cap;
     size_t len;
-    fmhs_cmp_f eqf;
-    fmhs_hash_f hashf;
+    fmhs_cmp_f* eqf;
+    fmhs_hash_f* hashf;
     size_t size_item;
     size_t iter_index;
     size_t seed;
 } fmhs_t;
 
-void fmhs_new(fmhs_t* hs, size_t size_item, fmhs_cmp_f eqf, fmhs_hash_f hashf,
+void fmhs_new(fmhs_t hs[static 1], size_t size_item, fmhs_cmp_f eqf, fmhs_hash_f hashf,
               size_t seed, size_t initial_cap);
 
-void fmhs_delete(fmhs_t* hs);
+void fmhs_delete(fmhs_t hs[static 1]);
 
-int fmhs_isin(const fmhs_t* hs, const void* itemptr);
+int fmhs_isin(const fmhs_t hs[static 1], FMNONNULL const void* itemptr);
 
-void fmhs_insert(fmhs_t* hs, const void* itemptr);
-int fmhs_remove(fmhs_t* hs, const void* itemptr);
+void fmhs_insert(fmhs_t hs[static 1], FMNONNULL const void* itemptr);
+int fmhs_remove(fmhs_t hs[static 1], FMNONNULL const void* itemptr);
 
-FMNULLABLE const void* fmhs_iter_begin(fmhs_t* hs);
-FMNULLABLE const void* fmhs_iter_next(fmhs_t* hs);
+FMNULLABLE const void* fmhs_iter_begin(fmhs_t hs[static 1]);
+FMNULLABLE const void* fmhs_iter_next(fmhs_t hs[static 1]);
 
 #endif // FMHS_H
 
@@ -56,7 +60,7 @@ FMNULLABLE const void* fmhs_iter_next(fmhs_t* hs);
 #include <stdlib.h> // malloc, free
 #include <string.h> // memset, memcpy
 
-void fmhs_new(fmhs_t* hs, size_t size_item, fmhs_cmp_f eqf, fmhs_hash_f hashf,
+void fmhs_new(fmhs_t hs[static 1], size_t size_item, fmhs_cmp_f eqf, fmhs_hash_f hashf,
               size_t seed, size_t initial_cap) {
 
     hs->items = malloc(initial_cap * size_item);
@@ -76,7 +80,7 @@ void fmhs_new(fmhs_t* hs, size_t size_item, fmhs_cmp_f eqf, fmhs_hash_f hashf,
     hs->seed       = seed;
 }
 
-int fmhs_isin(const fmhs_t* hs, const void* itemptr) {
+int fmhs_isin(const fmhs_t hs[static 1], const void* itemptr) {
     size_t i     = hs->hashf(itemptr, hs->size_item, hs->seed) % hs->cap;
     size_t count = 0;
     while (count < hs->cap) {
@@ -101,7 +105,7 @@ int fmhs_isin(const fmhs_t* hs, const void* itemptr) {
     return 0;
 }
 
-void fmhs_insert(fmhs_t* hs, const void* itemptr) {
+void fmhs_insert(fmhs_t hs[static 1], const void* itemptr) {
     assert(hs->cap > 0U &&
            "fmhs_insert: Capacity is zero, you need to first call fmhs_new");
 
@@ -137,13 +141,13 @@ void fmhs_insert(fmhs_t* hs, const void* itemptr) {
     hs->iter_index = 0U; // We have a change, now any iter need to be restarted.
 }
 
-void fmhs_delete(fmhs_t* hs) {
+void fmhs_delete(fmhs_t hs[static 1]) {
     free(hs->items);
     free(hs->taked);
     memset(hs, 0, sizeof(*hs));
 }
 
-int fmhs_remove(fmhs_t* hs, const void* itemptr) {
+int fmhs_remove(fmhs_t hs[static 1], const void* itemptr) {
     size_t i     = hs->hashf(itemptr, hs->size_item, hs->seed) % hs->cap;
     size_t count = 0U;
     while (count < hs->cap) {
@@ -161,12 +165,12 @@ int fmhs_remove(fmhs_t* hs, const void* itemptr) {
     return -1;
 }
 
-const void* fmhs_iter_begin(fmhs_t* hs) {
+const void* fmhs_iter_begin(fmhs_t hs[static 1]) {
     hs->iter_index = 0;
     return fmhs_iter_next(hs);
 }
 
-const void* fmhs_iter_next(fmhs_t* hs) {
+const void* fmhs_iter_next(fmhs_t hs[static 1]) {
     while (hs->iter_index < hs->cap) {
         if (!(hs->taked[hs->iter_index] < 0)) {
             hs->iter_index++;

@@ -1,8 +1,12 @@
 #ifndef FMHASH_H
 #define FMHASH_H
 
+#ifndef FMNONNULL // The value cannot be NULL
+#define FMNONNULL
+#endif
+
 #include <stddef.h> // size_t, NULL
-size_t fmhash(const void* p, size_t len, size_t seed);
+size_t fmhash(FMNONNULL const void* p, size_t len, size_t seed);
 
 #endif // FMHASH_H
 
