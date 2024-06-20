@@ -3,7 +3,6 @@
 
 #include <stddef.h> // size_t, NULL
 
-
 #ifndef FMNULLABLE // The value can be NULL
 #define FMNULLABLE
 #endif
@@ -12,16 +11,18 @@
 #define FMNONNULL
 #endif
 
-typedef int(fmhs_cmp_f)(FMNONNULL const void* item1ptr, FMNONNULL const void* item2ptr, size_t size_item);
-typedef size_t(fmhs_hash_f)(FMNONNULL const void* itemptr, size_t size_item, size_t seed);
+typedef int (*fmhs_cmp_f)(FMNONNULL const void* item1ptr,
+                          FMNONNULL const void* item2ptr, size_t size_item);
+typedef size_t (*fmhs_hash_f)(FMNONNULL const void* itemptr, size_t size_item,
+                              size_t seed);
 
 typedef struct {
     int* taked;
     unsigned char* items;
     size_t cap;
     size_t len;
-    fmhs_cmp_f* eqf;
-    fmhs_hash_f* hashf;
+    fmhs_cmp_f eqf;
+    fmhs_hash_f hashf;
     size_t size_item;
     size_t iter_index;
     size_t seed;
