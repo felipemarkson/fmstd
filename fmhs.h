@@ -65,13 +65,13 @@ void fmhs_new(fmhs_t hs[static 1], size_t size_item, fmhs_cmp_f eqf, fmhs_hash_f
               size_t seed, size_t initial_cap) {
 
     hs->items = malloc(initial_cap * size_item);
-    assert(hs->items && "fmhs_new_wcap: Could not allocate memory for items");
+    assert(hs->items && "fmhs_new: Could not allocate memory for items");
 
     hs->taked = malloc(initial_cap * sizeof(*hs->taked));
-    assert(hs->taked && "fmhs_new_wcap: Could not allocate memory for taked");
+    assert(hs->taked && "fmhs_new: Could not allocate memory for taked");
 
     memset(hs->items, 0, initial_cap * size_item);
-    memset(hs->taked, -1, initial_cap * sizeof(*hs->taked));
+    memset(hs->taked, 0, initial_cap * sizeof(*hs->taked));
     hs->cap        = initial_cap;
     hs->eqf        = eqf;
     hs->hashf      = hashf;
@@ -85,7 +85,7 @@ int fmhs_isin(const fmhs_t hs[static 1], const void* itemptr) {
     size_t i     = hs->hashf(itemptr, hs->size_item, hs->seed) % hs->cap;
     size_t count = 0;
     while (count < hs->cap) {
-        while (hs->taked[i] < 0) {
+        while (hs->taked[i] == 0) {
             ++i;
             ++count;
             if (count >= hs->cap)
@@ -124,7 +124,7 @@ void fmhs_insert(fmhs_t hs[static 1], const void* itemptr) {
 
     size_t i     = hs->hashf(itemptr, hs->size_item, hs->seed) % hs->cap;
     size_t count = 0U;
-    while (!(hs->taked[i] < 0)) {
+    while (!(hs->taked[i] == 0)) {
         if (hs->eqf(hs->items + (i * hs->size_item), itemptr, hs->size_item) == 0) {
             // Item already exists
             return;
@@ -154,7 +154,7 @@ int fmhs_remove(fmhs_t hs[static 1], const void* itemptr) {
     while (count < hs->cap) {
         if (hs->eqf(hs->items + (i * hs->size_item), itemptr, hs->size_item) == 0) {
             memset(hs->items + (i * hs->size_item), 0, hs->size_item);
-            hs->taked[i] = -1;
+            hs->taked[i] = 0;
             hs->len--;
             return 0;
         }
@@ -173,7 +173,7 @@ const void* fmhs_iter_begin(fmhs_t hs[static 1]) {
 
 const void* fmhs_iter_next(fmhs_t hs[static 1]) {
     while (hs->iter_index < hs->cap) {
-        if (!(hs->taked[hs->iter_index] < 0)) {
+        if (!(hs->taked[hs->iter_index] == 0)) {
             hs->iter_index++;
             return hs->items + (hs->iter_index - 1U) * hs->size_item;
         }
@@ -249,11 +249,11 @@ int main(void) {
                "fmhs.h: fmhs_new should set hs.items to a non null pointer");
 
         for (size_t i = 0U; i < hs.cap; ++i) {
-            if (!(hs.taked[i] < 0)) {
+            if (!(hs.taked[i] == 0)) {
                 fprintf(stderr, "Error on hs.taked[%zu]\n", i);
                 fflush(stderr);
-                ASSERT((hs.taked[i] < 0),
-                       "fmhs.h: fmhs_new should set all hs.taked to a negative value");
+                ASSERT((hs.taked[i] == 0),
+                       "fmhs.h: fmhs_new should set all hs.taked to zero");
             }
         }
 

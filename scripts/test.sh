@@ -21,7 +21,8 @@ cppcheck --quiet --language=c --std=c99 --max-ctu-depth=1000 --inconclusive \
 WARNINGSCLANG="  -Warray-bounds-pointer-arithmetic -Wconditional-uninitialized \
                  -Wloop-analysis -Wshift-sign-overflow -Wassign-enum \
                  -Wtautological-constant-in-range-compare -Wformat-type-confusion \
-                 -Widiomatic-parentheses -Wunreachable-code-aggressive"
+                 -Widiomatic-parentheses -Wunreachable-code-aggressive
+                 -Wno-nullability-extension"
 
 WARNINGSGCC="    -Warray-bounds=2 -Wattribute-alias=2 -fanalyzer"
 
